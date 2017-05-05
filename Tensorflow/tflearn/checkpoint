@@ -1,0 +1,2 @@
+model_checkpoint_path: "/root/ml/Tensorflow/tflearn/tflearncnn.model"
+all_model_checkpoint_paths: "/root/ml/Tensorflow/tflearn/tflearncnn.model"
