@@ -60,6 +60,9 @@ def train_neural_network(x):
 
 	hm_epochs = 10
 
+	# Add ops to save and restore all the variables.
+	saver = tf.train.Saver()
+
 	with tf.Session() as sess:
 		# OLD:
         #sess.run(tf.initialize_all_variables())
@@ -73,11 +76,17 @@ def train_neural_network(x):
 				_, c = sess.run([optimizer, cost], feed_dict = {x: epoch_x, y:epoch_y})
 				epoch_loss += c
 			print('Epoch',epoch,'completed out of ', hm_epochs,'loss: ',epoch_loss)
-			
+		
+		saver = tf.train.import_meta_graph('/tmp/model.ckpt.meta')
+		saver.restore(sess, "/tmp/model.ckpt")
+
 		correct = tf.equal(tf.argmax(prediction,1), tf.argmax(y,1))
 
 		accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
 
 		print('Accuracy:',accuracy.eval({x:mnist.test.images, y:mnist.test.labels}))
+
+		# save_path = saver.save(sess, "/tmp/model.ckpt")
+		# print("Model saved in file: %s" % save_path)
 
 train_neural_network(x)

@@ -56,28 +56,36 @@ def train_neural_network(x):
 	cost = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(logits=prediction, labels=y) )
 	optimizer = tf.train.AdamOptimizer(learning_rate=0.001).minimize(cost)
 
-	with tf.Session() as sess:
-		sess.run(tf.global_variables_initializer())
-	    
-		for epoch in range(hm_epochs):
-			epoch_loss = 0
-			i=0
-			while i < len(train_x):
-				start = i
-				end = i+batch_size
-				batch_x = np.array(train_x[start:end])
-				batch_y = np.array(train_y[start:end])
+	# Add ops to save and restore all the variables.
+	saver = tf.train.Saver()
 
-				_, c = sess.run([optimizer, cost], feed_dict={x: batch_x,
-				                                              y: batch_y})
-				epoch_loss += c
-				i+=batch_size
+	with tf.Session() as sess:
+		# sess.run(tf.global_variables_initializer())
+	    
+		# for epoch in range(hm_epochs):
+		# 	epoch_loss = 0
+		# 	i=0
+		# 	while i < len(train_x):
+		# 		start = i
+		# 		end = i+batch_size
+		# 		batch_x = np.array(train_x[start:end])
+		# 		batch_y = np.array(train_y[start:end])
+
+		# 		_, c = sess.run([optimizer, cost], feed_dict={x: batch_x,
+		# 		                                              y: batch_y})
+		# 		epoch_loss += c
+		# 		i+=batch_size
 				
-			print('Epoch', epoch+1, 'completed out of',hm_epochs,'loss:',epoch_loss)
+		# 	print('Epoch', epoch+1, 'completed out of',hm_epochs,'loss:',epoch_loss)
+		saver = tf.train.import_meta_graph('/tmp/model.ckpt.meta')
+		saver.restore(sess, "/tmp/model.ckpt")
+
 		correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
 		accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
 
 		print('Accuracy:',accuracy.eval({x:test_x, y:test_y}))
-
+		#  # Save the variables to disk.
+		# save_path = saver.save(sess, "/tmp/model.ckpt")
+		# print("Model saved in file: %s" % save_path)
 	    
 train_neural_network(x)

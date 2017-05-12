@@ -1,5 +1,8 @@
 /Tensorflow/cat_or_dog
 /Tensorflow/own_data/sentimet_set.pickle
+/Tensorflow/own_data/__pycache__/
 /Tensorflow/tflearn/tflearncnn.model.data-00000-of-00001
 /Tensorflow/tflearn/mnist
 /google_dev/MNIST-data
+/Tensorflow/basic/
+
